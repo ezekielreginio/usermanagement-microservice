@@ -15,6 +15,7 @@ class AddIsInactiveColumnToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->tinyInteger('is_inactive')->default(0);
+            $table->tinyInteger('fk_access_level');
         });
     }
 
@@ -27,6 +28,7 @@ class AddIsInactiveColumnToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('is_inactive');
+            $table->dropColumn('fk_access_level');
         });
     }
 }
