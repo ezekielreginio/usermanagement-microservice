@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRegistrationRequest;
 use App\Services\UsersService;
 use Illuminate\Http\Request;
 
@@ -18,10 +19,12 @@ class UsersController extends Controller
      * Registers a client in the platform
      *
      * @param Request $request
-     * @return 
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
      */
-    public function register(Request $request) 
+    public function register(ClientRegistrationRequest $request) 
     {
-        return response()->json($this->service->registerClient($request->all()));
+        return response()->json($this->service->registerClient($request->validated()));
     }
 }

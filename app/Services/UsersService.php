@@ -25,7 +25,6 @@ class UsersService
             $user = $this->repository->storeUser($userData);
 
             $client = $this->repository->storeClient($data['client'], $user->id);
-
             if (isset($data['business']) && $data['business']) {
                 $business = $this->repository->storeBusiness($data['business']);
                 $this->repository->linkClientToBusiness($client->id, $business->id);
@@ -35,13 +34,13 @@ class UsersService
                 "data" => [
                     "user" => $user,
                     "client" => $client,
-                    "business" => $business
+                    "business" => $business ?? []
                 ],
                 "message" => "User registered successfully"
             ];
         } catch(Exception $e) {
             DB::rollBack();
-            
+
             return [
                 "message" => $e->getMessage(),
                 "code" => $e->getCode()
