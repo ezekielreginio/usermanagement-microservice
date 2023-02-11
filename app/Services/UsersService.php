@@ -19,6 +19,14 @@ class UsersService
         $this->builder = $builder;
     }
 
+    /**
+     * Registers a Client in the platform
+     *
+     * @param array $data
+     * @return array
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function registerClient(array $data)
     {
         DB::beginTransaction();
@@ -52,6 +60,14 @@ class UsersService
         }
     }
 
+    /**
+     * Creates an Employee record
+     *
+     * @param array $data
+     * @return array
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function createEmployee(array $data)
     {
         DB::beginTransaction();
