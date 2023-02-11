@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Builders\UserBuilder;
 use App\Repositories\UsersRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -9,10 +10,12 @@ use Illuminate\Support\Facades\DB;
 class UsersService
 {
     private UsersRepository $repository;
+    private UserBuilder $builder;
     
-    public function __construct(UsersRepository $repository)
+    public function __construct(UsersRepository $repository, UserBuilder $builder)
     {
         $this->repository = $repository;
+        $this->builder = $builder;
     }
 
     public function registerClient(array $data)
@@ -37,6 +40,34 @@ class UsersService
                     "business" => $business ?? []
                 ],
                 "message" => "User registered successfully"
+            ];
+        } catch(Exception $e) {
+            DB::rollBack();
+
+            return [
+                "message" => $e->getMessage(),
+                "code" => $e->getCode()
+            ];
+        }
+    }
+
+    public function createEmployee(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $employee = $this->builder
+                             ->createUser($data['user'], 1)
+                             ->createEmployee($data['employee'])
+                             ->createPosition($data['employee']['position'])
+                             ->createEmployeePosition();
+            DB::commit();
+            return [
+                "data" => [
+                    "user" => $employee->getUser(),
+                    "employee" => $employee->getEmployee(),
+                    "position" => $employee->getPosition()
+                ],
+                "message" => "Employee created successfully."
             ];
         } catch(Exception $e) {
             DB::rollBack();

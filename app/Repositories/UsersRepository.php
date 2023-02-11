@@ -5,6 +5,9 @@ namespace App\Repositories;
 use App\Models\Business;
 use App\Models\Client;
 use App\Models\ClientToBusiness;
+use App\Models\Employee;
+use App\Models\EmployeeToPosition;
+use App\Models\Position;
 use App\Models\User;
 
 class UsersRepository
@@ -20,9 +23,30 @@ class UsersRepository
         return Client::create($data);
     }
 
-    public function storeBusiness($data)
+    public function storeBusiness(array $data)
     {
         return Business::create($data);
+    }
+
+    public function storeEmployee(array $data, int $userId = null)
+    {
+        $data['fk_user'] = $data['fk_user'] ?? $userId;
+        return Employee::create($data);
+    }
+
+    public function storePosition(string $position)
+    {
+        return Position::create([ "name" => $position ]);
+    }
+
+    public function getPositionByName(string $position)
+    {
+        return Position::where(['name' => $position])->first();
+    }
+
+    public function storeEmployeeToPosition(array $data)
+    {
+        return EmployeeToPosition::create($data);
     }
 
     public function linkClientToBusiness(int $clientId, int $businessId)

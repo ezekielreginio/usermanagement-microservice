@@ -27,4 +27,9 @@ class UsersController extends Controller
     {
         return response()->json($this->service->registerClient($request->validated()));
     }
+
+    public function storeEmployee(Request $request)
+    {
+        return response()->json($this->service->createEmployee($request->all()));
+    }
 }
