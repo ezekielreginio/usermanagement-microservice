@@ -25,4 +25,14 @@ class Employee extends Model
         'philhealth_id',
         'birthdate'
     ];
+
+    /**
+     * Establish the one to many relationship between users and employees_to_positions table
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function positions() 
+    {
+        return $this->hasMany(EmployeeToPosition::class, 'fk_employee');
+    }
 }

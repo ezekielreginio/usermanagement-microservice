@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Builders\UserBuilder;
+use App\Http\Resources\UserResource;
 use App\Repositories\UsersRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -62,11 +63,7 @@ class UsersService
                              ->createEmployeePosition();
             DB::commit();
             return [
-                "data" => [
-                    "user" => $employee->getUser(),
-                    "employee" => $employee->getEmployee(),
-                    "position" => $employee->getPosition()
-                ],
+                "data" => new UserResource($employee->getUser()),
                 "message" => "Employee created successfully."
             ];
         } catch(Exception $e) {

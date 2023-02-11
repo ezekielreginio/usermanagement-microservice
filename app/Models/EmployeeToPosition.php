@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EmployeeToPosition extends Model
 {
-    use SoftDeletes;
-
     protected $table = 'employees_to_positions';
 
     /**
@@ -20,4 +17,14 @@ class EmployeeToPosition extends Model
         'fk_employee',
         'fk_position'
     ];
+
+    /**
+     * Establish the one on one relationship between employees_to_positions to positions table
+     *
+     * @return void
+     */
+    public function position()
+    {
+        return $this->belongsTo(Position::class, 'fk_position');
+    }
 }
