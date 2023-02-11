@@ -23,6 +23,13 @@ class UserResource extends JsonResource
         ];
     }
 
+    /**
+     * Format Position JSON Response
+     *
+     * @return array
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     private function formatPositions()
     {
         $positions = [];
