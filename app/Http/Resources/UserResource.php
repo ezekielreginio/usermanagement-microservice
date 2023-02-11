@@ -26,8 +26,10 @@ class UserResource extends JsonResource
     private function formatPositions()
     {
         $positions = [];
-        foreach ($this->employee->positions as $employeePosition) {
-            array_push($positions, $employeePosition->position->name);
+        if ($this->employee && $this->employee->positions) {
+            foreach ($this->employee->positions as $employeePosition) {
+                array_push($positions, $employeePosition->position->name);
+            }
         }
 
         return $positions;
