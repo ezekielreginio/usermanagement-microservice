@@ -28,6 +28,12 @@ class UsersController extends Controller
         return response()->json($this->service->registerClient($request->validated()));
     }
 
+    /**
+     * Stores an employee record in the platform
+     *
+     * @param Request $request
+     * @return void
+     */
     public function storeEmployee(Request $request)
     {
         return response()->json($this->service->createEmployee($request->all()));
