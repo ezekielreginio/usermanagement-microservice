@@ -16,6 +16,13 @@ class UserBuilder
     private EmployeeToPosition $employeeToPosition;
     private UsersRepository $repository;
 
+    /**
+     * Constructor Method for UserBuilder
+     *
+     * @param UsersRepository $repository
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function __construct(UsersRepository $repository)
     {
         $this->repository = $repository;
@@ -23,6 +30,16 @@ class UserBuilder
 
     /**---------- BUILDER METHODS ----------*/
 
+    /**
+     * Creates a user record
+     *
+     * @param array $userData
+     * @param integer $accessLevel
+     * 
+     * @return UserBuilder
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function createUser(array $userData, int $accessLevel)
     {
         $userData['password'] = app('hash')->make($userData['password']);
@@ -32,6 +49,15 @@ class UserBuilder
         return $this;
     }
     
+    /**
+     * Creates an employee record
+     *
+     * @param array $employeeData
+     * @param integer|null $userId
+     * @return UserBuilder
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function createEmployee(array $employeeData, int $userId = null)
     {
         $employeeData['date_hired'] = $employeeData['date_hired'] ?? now();
@@ -41,6 +67,15 @@ class UserBuilder
         return $this;
     }
 
+    /**
+     * Creates a position record
+     * Note: If the position exists, it will fetch the position ID
+     *
+     * @param string $position
+     * @return UserBuilder
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function createPosition(string $position)
     {
         $this->position = $this->repository->getPositionByName($position);
@@ -54,6 +89,15 @@ class UserBuilder
         return $this;
     }
 
+    /**
+     * Stores the Employee to Position Relationship
+     *
+     * @param integer|null $employeeId
+     * @param integer|null $positionId
+     * @return UserBuilder
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function createEmployeePosition(int $employeeId = null, int $positionId = null)
     {
         $employeeId = $employeeId ?? $this->employee->id;
@@ -66,16 +110,37 @@ class UserBuilder
     }
 
     /**---------- GETTER METHODS ----------*/
+    /**
+     * Returns the User Model
+     *
+     * @return User
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function getUser()
     {
         return $this->user;
     }
 
+    /**
+     * Returns the Employee Model
+     *
+     * @return Employee
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function getEmployee()
     {
         return $this->employee;
     }
 
+    /**
+     * Returns the Position Model
+     *
+     * @return Position
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function getPosition()
     {
         return $this->position;
