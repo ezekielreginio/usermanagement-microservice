@@ -24,11 +24,9 @@ Route::post('/register', [UsersController::class, 'register']);
 Route::post('/employee', [UsersController::class, 'storeEmployee']);
 
 Route::group([
-
-    'middleware' => 'api',
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
     Route::post('me', [AuthController::class, 'me']);
 });
