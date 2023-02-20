@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Builders\UserBuilder;
+use App\Http\Resources\UserResource;
 use App\Repositories\UsersRepository;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -9,12 +11,22 @@ use Illuminate\Support\Facades\DB;
 class UsersService
 {
     private UsersRepository $repository;
+    private UserBuilder $builder;
     
-    public function __construct(UsersRepository $repository)
+    public function __construct(UsersRepository $repository, UserBuilder $builder)
     {
         $this->repository = $repository;
+        $this->builder = $builder;
     }
 
+    /**
+     * Registers a Client in the platform
+     *
+     * @param array $data
+     * @return array
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
     public function registerClient(array $data)
     {
         DB::beginTransaction();
@@ -37,6 +49,38 @@ class UsersService
                     "business" => $business ?? []
                 ],
                 "message" => "User registered successfully"
+            ];
+        } catch(Exception $e) {
+            DB::rollBack();
+
+            return [
+                "message" => $e->getMessage(),
+                "code" => $e->getCode()
+            ];
+        }
+    }
+
+    /**
+     * Creates an Employee record
+     *
+     * @param array $data
+     * @return array
+     * 
+     * @author Ezekiel Reginio <ezekiel@1export.com>
+     */
+    public function createEmployee(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $employee = $this->builder
+                             ->createUser($data['user'], 1)
+                             ->createEmployee($data['employee'])
+                             ->createPosition($data['employee']['position'])
+                             ->createEmployeePosition();
+            DB::commit();
+            return [
+                "data" => new UserResource($employee->getUser()),
+                "message" => "Employee created successfully."
             ];
         } catch(Exception $e) {
             DB::rollBack();
